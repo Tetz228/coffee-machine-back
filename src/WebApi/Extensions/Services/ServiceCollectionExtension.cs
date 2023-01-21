@@ -7,6 +7,9 @@
     using Repositories;
     using Repositories.Interfaces;
 
+    using UoW;
+    using UoW.Interfaces;
+
     /// <summary>
     ///     Расширения для коллекции сервисов.
     /// </summary>
@@ -28,6 +31,7 @@
             serviceCollection.AddScoped<IUserRepository, UserRepository>();
             serviceCollection.AddScoped<IOrderRepository, OrderRepository>();
             serviceCollection.AddScoped<IStatisticRepository, StatisticRepository>();
+            serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
         }
     }
 }
