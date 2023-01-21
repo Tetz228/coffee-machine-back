@@ -3,14 +3,22 @@ using Microsoft.OpenApi.Models;
 
 using WebApi.Db;
 using WebApi.Extensions.Services;
+using WebApi.Services;
+using WebApi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 //Настройка сервисов.
 
-builder.Services.AddControllers();
-builder.Services.AddRepositoriesAndDbContext(builder.Configuration);
 builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "CoffeeMachine", Version = "v1" }));
+builder.Services.AddControllers();
+builder.Services.AddRepositoriesAndDbContext(builder.Configuration);
+builder.Services.AddScoped<ICoffeeService, CoffeeService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IStatisticService, StatisticService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IChangeService, ChangeService>();
 
 var app = builder.Build();
 //Настройка приложения.
