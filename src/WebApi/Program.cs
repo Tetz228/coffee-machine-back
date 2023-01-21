@@ -1,9 +1,12 @@
 using Microsoft.OpenApi.Models;
 
+using WebApi.Extensions.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 //Настройка сервисов.
 
 builder.Services.AddControllers();
+builder.Services.AddRepositoriesAndDbContext(builder.Configuration);
 builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "CoffeeMachine", Version = "v1" }));
 
