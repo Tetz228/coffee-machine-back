@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 using WebApi.Db;
 using WebApi.Extensions.Services;
+using WebApi.Jwt;
 using WebApi.Services;
 using WebApi.Services.Interfaces;
 
@@ -10,7 +12,32 @@ var builder = WebApplication.CreateBuilder(args);
 //Настройка сервисов.
 
 builder.Services.AddSwaggerGen(options =>
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "CoffeeMachine", Version = "v1" }));
+{
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "CoffeeMachine", Version = "v1" });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT."
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 builder.Services.AddControllers();
 builder.Services.AddRepositoriesAndDbContext(builder.Configuration);
 builder.Services.AddScoped<ICoffeeService, CoffeeService>();
@@ -19,6 +46,20 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IStatisticService, StatisticService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IChangeService, ChangeService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = JwtConfigurator.CreateTokenValidationParameters(
+        builder.Configuration["Options:Jwt:Issuer"], builder.Configuration["Options:Jwt:Audience"],
+        builder.Configuration["Options:Jwt:Key"]);
+});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(builder.Configuration["Options:Cors:Name"], policy =>
+        policy.WithOrigins(builder.Configuration["Options:Cors:URL"])
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
 
 var app = builder.Build();
 //Настройка приложения.
@@ -39,6 +80,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
+
+app.UseCors(builder.Configuration["Options:Cors:Name"]);
+
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseEndpoints(endpoint => endpoint.MapControllers());
 
