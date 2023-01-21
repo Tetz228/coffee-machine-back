@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
+using WebApi.Db;
 using WebApi.Extensions.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,11 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 //Настройка приложения.
+
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider.GetRequiredService<CoffeeMachineContext>().Database.Migrate();
+}
 
 if (app.Environment.IsDevelopment())
 {
