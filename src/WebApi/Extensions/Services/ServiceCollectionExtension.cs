@@ -4,6 +4,9 @@
 
     using Microsoft.EntityFrameworkCore;
 
+    using Repositories;
+    using Repositories.Interfaces;
+
     /// <summary>
     ///     Расширения для коллекции сервисов.
     /// </summary>
@@ -21,6 +24,10 @@
             {
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             });
+            serviceCollection.AddScoped<ICoffeeRepository, CoffeeRepository>();
+            serviceCollection.AddScoped<IUserRepository, UserRepository>();
+            serviceCollection.AddScoped<IOrderRepository, OrderRepository>();
+            serviceCollection.AddScoped<IStatisticRepository, StatisticRepository>();
         }
     }
 }
