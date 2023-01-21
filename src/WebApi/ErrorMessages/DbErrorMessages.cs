@@ -11,11 +11,6 @@
         public const string FoundCoffee = "Не удалось получить кофе для создания статистики.";
 
         /// <summary>
-        ///     Сообщение о некорректных данных.
-        /// </summary>
-        public const string IncorrectData = "Были переданы некорректные данные.";
-
-        /// <summary>
         ///     Сообщение о неудачном создании сущности.
         /// </summary>
         public const string CreateData = "Не удалось создать сущность.";

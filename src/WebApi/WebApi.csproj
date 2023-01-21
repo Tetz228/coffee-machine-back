@@ -19,6 +19,11 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.26.0" />
+        <PackageReference Include="NLog" Version="5.1.1" />
+        <PackageReference Include="NLog.Config" Version="4.7.15" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="5.2.1" />
+        <PackageReference Include="NLog.Schema" Version="5.1.1" />
+        <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.1" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.26.0" />
