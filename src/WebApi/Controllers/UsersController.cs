@@ -159,12 +159,7 @@
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserDto>> UpdateBalanceUserAsync([FromRoute] Guid id, [FromBody] decimal sum)
         {
-            var isInteger = int.TryParse(sum.ToString(), out var bill);
-            if (!isInteger)
-            {
-                return BadRequest();
-            }
-
+            var bill = decimal.ToInt32(sum);
             var isReplenishmentSumForBills = _userService.CheckReplenishmentSumForBills((Bills)bill);
             if (!isReplenishmentSumForBills)
             {

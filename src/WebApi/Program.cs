@@ -67,12 +67,12 @@ try
                 .AllowAnyHeader()
                 .AllowAnyMethod());
     });
-    
+
 //Подключение логирования.
 
     builder.Logging.ClearProviders();
     builder.Host.UseNLog();
-    
+
     var app = builder.Build();
 //Настройка приложения.
 
@@ -110,4 +110,11 @@ catch (Exception exception)
 finally
 {
     LogManager.Shutdown();
+}
+
+namespace WebApi
+{
+    public class Program
+    {
+    }
 }
